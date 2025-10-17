@@ -129,6 +129,12 @@
             border-color: rgba(251, 191, 36, 1);
         }
         
+        .winner-error {
+            background: rgba(107, 114, 128, 0.9);
+            color: white;
+            border-color: rgba(107, 114, 128, 1);
+        }
+        
         .info-container {
             padding: 1.5rem;
         }
@@ -283,20 +289,20 @@
             <div class="subtitle">Google Gemini 2.5 Flash vs OpenAI GPT-5 Image</div>
             <div class="stats">
                 <div class="stat-box">
-                    <div class="stat-label">Total Comparisons</div>
-                    <div class="stat-value">46</div>
+                    <div class="stat-label">Total Images</div>
+                    <div class="stat-value">50</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">Gemini Wins</div>
-                    <div class="stat-value" style="color: #3b82f6;">26</div>
+                    <div class="stat-value" style="color: #3b82f6;">28</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">GPT-5 Wins</div>
-                    <div class="stat-value" style="color: #10b981;">20</div>
+                    <div class="stat-value" style="color: #10b981;">22</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Ties</div>
-                    <div class="stat-value" style="color: #f59e0b;">0</div>
+                    <div class="stat-label">Evaluated</div>
+                    <div class="stat-value" style="color: #f59e0b;">50 / 50</div>
                 </div>
             </div>
         </header>
@@ -333,6 +339,67 @@
                             <div class="score-comparison">
                                 <span class="score-left">9</span>
                                 <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_02.jpg" alt="Prompt 2" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#02</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd action photography</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">An 80-year-old grandmother with gray hair in a bun performing a perfect skateboard kickflip over a park bench, motion blur, while five otters in the background sprint to catch up with her, golden hour lighting, sports photography style</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image significantly better fulfills the prompt requirements. Most critically, it depicts an actual kickflip in progress - the skateboard is clearly separated from the grandmother's feet and rotating mid-air, which is the defining characteristic of a kickflip trick. The RIGHT image shows the grandmother jumping over the skateboard, which is not a kickflip at all. Both images successfully include an elderly woman with gray hair in a bun, a park bench, otters (appearing to be five in each), and golden hour lighting. However, the LEFT image demonstrates superior motion blur on the skateboard wheels and better sports photography dynamics with the frozen action shot. The composition in the LEFT image is more dramatic and better captures the energy of skateboarding. The RIGHT image, while technically well-executed with good lighting and clarity, fundamentally fails to show a kickflip - the core action requested in the prompt. The otters in the LEFT image also appear more clearly to be in motion/sprinting compared to the RIGHT image where they seem more stationary. Overall, the LEFT image delivers on the specific technical skateboarding trick requested while maintaining all other prompt elements.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
                             </div>
                         </div>
                         
@@ -1464,6 +1531,67 @@
 
             <div class="gallery-item">
                 <div class="image-container">
+                    <img src="images/labeled_21.jpg" alt="Prompt 21" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#21</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic architectural</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Architectural photography of a Baroque palace interior with a modern Apple Store built inside, glass stairs and minimalist displays contrasting ornate gilded walls, wide angle lens, HDR</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image better fulfills the prompt requirements. Both images successfully depict a Baroque palace interior with an Apple Store integration, but the LEFT image excels in several critical areas. Most importantly, it features a prominent glass staircase as a central focal point, which is explicitly mentioned in the prompt ('glass stairs'). The staircase is transparent/translucent with a distinctive curved design that creates a striking modern element. The LEFT image also shows actual customers and activity, making it feel like a functioning retail space. The minimalist Apple displays (wooden tables with products) are clearly visible and contrast beautifully with the ornate gilded ceiling featuring frescoes and elaborate Baroque detailing. The wide-angle lens perspective is evident, capturing the full grandeur of the space. The RIGHT image, while technically excellent and showing beautiful Baroque architecture with a glass staircase, appears more like an empty showroom or render. The staircase, though present, is less prominent and the space lacks the lived-in quality of an actual store. The RIGHT image has superior HDR processing with more dramatic lighting and reflections on the polished floor, but the LEFT image better balances all prompt elements including the critical 'glass stairs' feature as a dominant design element, the contrast between old and new, and the authentic Apple Store atmosphere.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 8</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
                     <img src="images/labeled_22.jpg" alt="Prompt 22" loading="lazy">
                     <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
                 </div>
@@ -1637,6 +1765,67 @@
                             <div class="score-label">Style Execution</div>
                             <div class="score-comparison">
                                 <span class="score-left">3</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_25.jpg" alt="Prompt 25" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#25</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic concert photography</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Concert photography of Beethoven DJing at a modern EDM festival, headphones on, hands on turntables, crowd with glow sticks, stage lights, wide angle lens, dramatic shadows</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully depict Beethoven at an EDM festival, the RIGHT image better fulfills the specific prompt requirements. The RIGHT image shows Beethoven with headphones clearly visible on his head, hands actively positioned on turntables/DJ equipment, and provides a closer, more detailed view that better captures 'concert photography' aesthetics. The LEFT image, while visually spectacular with its wide-angle festival view, shows Beethoven without visible headphones and his hands are less clearly engaged with turntables - they appear to be on a controller but the turntables aren't as evident. The RIGHT image also delivers superior detail work on Beethoven's period-accurate costume (the cravat, period jacket) combined with modern DJ equipment, creating a more compelling anachronistic fusion. Both images feature crowds with glow sticks, stage lights, and dramatic shadows, but the RIGHT image's composition better emphasizes the DJ as the subject while maintaining the festival atmosphere. The wide-angle requirement is better met by the LEFT image, but the RIGHT image's medium-wide angle still captures sufficient environmental context while prioritizing the key subject matter and critical prompt elements like headphones and turntable interaction.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 8</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
                                 <span class="score-right">9</span>
                             </div>
                         </div>
@@ -2919,6 +3108,67 @@
                             <div class="score-comparison">
                                 <span class="score-left">10</span>
                                 <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_47.jpg" alt="Prompt 47" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#47</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic classroom</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Documentary photography of Albert Einstein teaching a modern coding bootcamp, whiteboard covered in Python code, students with laptops, Einstein in characteristic disheveled hair, classroom lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The RIGHT image significantly better fulfills the prompt requirements. Most critically, it shows a whiteboard clearly covered in Python code (with visible syntax like 'def foo(n):', 'range()', 'try:', 'except:', etc.), which is a central element of the prompt. The RIGHT image also shows multiple students with laptops displaying code, Einstein with his characteristic disheveled hair and mustache in appropriate attire, and modern classroom lighting. The LEFT image, while showing Einstein teaching students with laptops, fails on a critical requirement: the whiteboard behind Einstein appears to show his portrait/photo rather than Python code. The LEFT image is also in black and white, which is less typical of documentary photography in a modern coding bootcamp context. The RIGHT image better captures the anachronistic yet specific scenario requested - Einstein in a contemporary coding education setting with all the technical details visible and accurate.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 6</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">5</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
                             </div>
                         </div>
                         </div>
