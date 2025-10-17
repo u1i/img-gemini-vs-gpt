@@ -1,0 +1,3122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Model Comparison Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .gallery {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .gallery-item {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .image-container {
+            position: relative;
+            width: 100%;
+            background: #f5f5f5;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .winner-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid;
+        }
+        
+        .winner-left {
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+            border-color: rgba(59, 130, 246, 1);
+        }
+        
+        .winner-right {
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            border-color: rgba(16, 185, 129, 1);
+        }
+        
+        .winner-tie {
+            background: rgba(251, 191, 36, 0.9);
+            color: white;
+            border-color: rgba(251, 191, 36, 1);
+        }
+        
+        .info-container {
+            padding: 1.5rem;
+        }
+        
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+        
+        .prompt-id {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-category {
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+        
+        .badge-difficulty {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-difficulty.hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-difficulty.easy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .prompt-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+        
+        .evaluation {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .eval-reasoning {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #6b7280;
+            font-style: italic;
+        }
+        
+        .scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .score-item {
+            background: #f9fafb;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .score-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .score-comparison {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            justify-content: center;
+            margin-top: 0.25rem;
+        }
+        
+        .score-left {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .score-right {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 4rem;
+            padding: 2rem;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                gap: 1rem;
+            }
+            
+            .stat-box {
+                padding: 0.75rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 AI Image Model Comparison</h1>
+            <div class="subtitle">Google Gemini 2.5 Flash vs OpenAI GPT-5 Image</div>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-label">Total Comparisons</div>
+                    <div class="stat-value">46</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Gemini Wins</div>
+                    <div class="stat-value" style="color: #3b82f6;">26</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">GPT-5 Wins</div>
+                    <div class="stat-value" style="color: #10b981;">20</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Ties</div>
+                    <div class="stat-value" style="color: #f59e0b;">0</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="gallery">
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_01.jpg" alt="Prompt 1" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#01</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic portrait photography</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A hyper-realistic portrait of a medieval knight in full plate armor ordering a venti caramel frappuccino at a modern Starbucks counter, natural lighting, shallow depth of field, Canon 85mm f/1.4, the barista looks unsurprised</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) delivers a superior execution of this complex prompt. It features more accurate plate armor with better medieval authenticity, clearly shows a Starbucks cup being held (matching 'ordering' action), and most importantly, captures the barista's 'unsurprised' expression perfectly - she looks casually blasé while taking the order on a tablet. The composition uses effective shallow depth of field with natural lighting that mimics the specified Canon 85mm f/1.4 aesthetic. Model 2 (RIGHT) has good armor detail but shows the knight gesturing rather than clearly ordering, the frappuccino is on the counter but the interaction is less clear, and critically, the barista appears more curious/interested rather than unsurprised. LEFT also better captures the hyper-realistic portrait quality and the absurdist humor of the prompt.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_03.jpg" alt="Prompt 3" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#03</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic business scene</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A Tyrannosaurus Rex wearing a tailored navy business suit and red tie, standing at a podium giving a PowerPoint presentation to a boardroom full of attentive penguins, fluorescent office lighting, corporate photography style</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully capture the humorous concept, the LEFT image better fulfills the specific prompt requirements. It clearly shows the T-Rex at a podium with a visible PowerPoint presentation displaying business content ('Q3 GROWTH STRATEGY' with charts). The LEFT also better captures the 'corporate photography style' with its more neutral, professional composition and proper fluorescent office lighting. The RIGHT image, while having excellent detail and drama, shows the T-Rex more beside/in front of the podium rather than clearly 'at' it, and the presentation screen is less prominent with generic charts. The RIGHT's dramatic angle and green tint, while artistically interesting, deviates from the requested straightforward corporate photography style.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_04.jpg" alt="Prompt 4" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#04</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd wildlife photography</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A majestic lion wearing reading glasses and a tweed professor's jacket, teaching calculus on a chalkboard to a classroom of confused house cats, documentary photography style, natural window light</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Both images execute the whimsical prompt well, but RIGHT edges ahead due to superior documentary photography style execution and more authentic natural lighting. The RIGHT image features more convincing window light with realistic shadows and atmospheric quality. The reading glasses on the lion are clearly visible and well-rendered. The cats' positioning and expressions feel more natural and documentary-like, captured from behind as if observing a real classroom moment. LEFT has excellent composition and charming details (globe, books, varied cat expressions) but the lighting feels more artificially staged and cinematic rather than documentary. The glasses are less prominent on LEFT's lion. Both show calculus equations appropriately, though RIGHT's chalkboard work appears slightly more authentic. The 'confused' aspect is better conveyed in LEFT with varied facial expressions, while RIGHT's rear-view perspective is more documentary but shows less emotion. Overall, RIGHT better honors the 'documentary photography style, natural window light' specification.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 8</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_05.jpg" alt="Prompt 5" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#05</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic street photography</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A Victorian-era gentleman in top hat and tails using a MacBook Pro at a modern subway station, commuters walking past unfazed, Leica M10 street photography, black and white, high contrast</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully capture the anachronistic concept, the RIGHT image significantly outperforms in multiple criteria. It features a proper Victorian top hat (clearly visible and accurately styled), superior Leica M10 street photography aesthetics with authentic shallow depth of field and motion blur of commuters, more dramatic high-contrast black and white processing, and stronger composition with the gentleman positioned against the tiled wall. The LEFT image has a gentleman in period clothing but with an ambiguous shorter hat (possibly a bowler rather than the requested top hat), less distinctive photographic style, and weaker environmental context. The RIGHT image also better captures the 'unfazed commuters' element with visible motion blur suggesting busy movement.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 6</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_06.jpg" alt="Prompt 6" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#06</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd fine art</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">An elegant oil painting in the style of Rembrandt showing three astronauts having an elaborate tea party on the lunar surface with fine bone china, silver teapot, and cucumber sandwiches, Earth visible in background</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) significantly outperforms Model 2 (RIGHT) in prompt adherence and overall execution. LEFT clearly shows three distinct astronauts having tea on the lunar surface with visible fine china, a silver teapot, food items that could be sandwiches, and a prominently displayed Earth in the background. The composition is dynamic and engaging, with period-appropriate Baroque elements (feathered plumes, red cape) that cleverly blend Rembrandt's era with the space theme. RIGHT, while demonstrating excellent Rembrandt-style lighting and painterly technique, fails critical prompt requirements: the astronauts and setting are rendered in monochromatic golden-brown tones making details unclear, Earth is barely visible as a small orb, and specific items like cucumber sandwiches and fine bone china are indistinguishable. LEFT achieves better narrative clarity while maintaining classical oil painting aesthetics.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_07.jpg" alt="Prompt 7" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#07</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic fashion photography</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Ancient Egyptian pharaoh Tutankhamun in full ceremonial regalia playing Xbox with a gaming headset, sitting on his golden throne, RGB lighting, modern gaming setup, fashion editorial style, dramatic rim lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully capture the anachronistic concept, Model 2 (RIGHT) delivers superior execution across multiple criteria. LEFT shows Tutankhamun with a modern gaming controller but lacks the Xbox specificity mentioned in the prompt. RIGHT clearly shows an Xbox controller with visible buttons. RIGHT also demonstrates better fashion editorial style with its closer, more dramatic framing and superior rim lighting that creates dimensional separation. The composition is more refined with better focus on the subject. LEFT, while creative with its elaborate throne and Egyptian iconography, feels more cluttered and the pharaoh appears less engaged. RIGHT's skin textures, metallic details on regalia, and overall rendering quality are noticeably sharper. The RGB lighting is present in both but better integrated in RIGHT's composition.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_08.jpg" alt="Prompt 8" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#08</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd portrait</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A sophisticated octopus wearing a monocle and bow tie, conducting an orchestra of confused goldfish, concert hall setting, dramatic stage lighting, 50mm portrait lens</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">LEFT (Model 1) demonstrates superior prompt adherence and composition. It accurately depicts a concert hall setting with proper architectural details (balconies, chandelier, stage), the octopus clearly conducting with a baton, goldfish in fishbowls as orchestra members, and dramatic stage lighting. The monocle and bow tie are clearly visible. RIGHT (Model 2) has better technical rendering quality and details on the octopus itself, but fails critical prompt requirements: it's set underwater rather than in a concert hall, lacks the 50mm portrait lens aesthetic, and while the goldfish appear confused, they're not clearly arranged as an orchestra. The concert hall setting is a fundamental requirement that LEFT delivers convincingly while RIGHT completely misses.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_09.jpg" alt="Prompt 9" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#09</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic sports photography</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A samurai warrior in full traditional armor teaching a hot yoga class in a modern studio, other students in yoga pants doing downward dog, mirrors on walls, soft diffused lighting, Canon 24-70mm</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image better fulfills the prompt requirements. Most critically, it shows the samurai actively DOING yoga (downward dog pose), which creates the humorous juxtaposition the prompt implies. The samurai is teaching by example, which is more aligned with 'teaching a hot yoga class.' The RIGHT image shows the samurai standing in a prayer pose merely observing, which is less engaging with the yoga class concept. LEFT also excels in composition with excellent use of mirrors (visible on the right wall), superior soft diffused lighting through large windows, and a cleaner modern studio aesthetic. Both have students doing downward dog and good armor detail, but LEFT's execution of the core concept - a samurai warrior fully engaged in teaching/doing yoga - is significantly stronger.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_10.jpg" alt="Prompt 10" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#10</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd watercolor painting</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Delicate watercolor illustration of a walrus in a ballerina tutu performing a perfect pirouette on stage at Lincoln Center, soft pastel colors, loose brushstrokes, spotlight effect</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">LEFT better fulfills the prompt requirements. It depicts a walrus ballerina on a grand stage (Lincoln Center-style architecture), in a perfect pirouette pose with clear spotlight effect and delicate watercolor technique. RIGHT has superior watercolor artistry and charm, but fails critical prompt elements: the walrus is not performing a pirouette (it's in a generic ballet pose), the setting lacks the grand theater architecture of Lincoln Center, and the spotlight effect is minimal. While RIGHT excels in loose brushwork and pastel colors, prompt adherence is paramount.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 8</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_11.jpg" alt="Prompt 11" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#11</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic documentary</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Photojournalistic shot of Cleopatra taking a selfie with an iPhone in front of the pyramids, hieroglyphics visible, natural sunlight, National Geographic style, 35mm lens</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) significantly outperforms Model 2 in capturing the National Geographic photojournalistic style and prompt requirements. The LEFT image features superior composition with the Sphinx visible alongside the pyramids, clearer hieroglyphics on the stone pillar, more authentic Egyptian costume details, better natural lighting that creates depth, and even includes a National Geographic watermark. The subject appears more joyful and natural in the selfie pose. The RIGHT image, while technically competent, has a more generic fashion photography feel, less distinct hieroglyphics, simpler composition with only one pyramid clearly visible, and lacks the documentary authenticity requested in the prompt.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_12.jpg" alt="Prompt 12" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#12</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd 3D render</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Photorealistic 3D render of a penguin wearing a hard hat operating a construction crane, building a sandcastle, other penguins as construction crew, golden hour lighting, Octane render</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully execute the whimsical concept, the RIGHT image demonstrates superior technical quality, composition, and prompt adherence. The RIGHT image features a penguin clearly operating the crane from inside the cab (more accurate to 'operating'), with the crane actively lifting a bucket of sand - showing direct interaction with the construction process. The golden hour lighting is more pronounced and beautifully executed with warm, rich tones throughout. The penguin crew members are more clearly defined with better detail and visibility. The LEFT image, while charming, shows a penguin standing beside rather than clearly 'operating' the crane, and the lighting is more muted with less pronounced golden hour quality. The RIGHT image also has sharper details, better material rendering (the crane's metal, sand textures), and more dynamic composition with the penguin positioned prominently in the crane cab.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_13.jpg" alt="Prompt 13" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#13</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic still life</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A classical Dutch Golden Age still life painting featuring a smartphone, AirPods, and energy drink can arranged with traditional flowers and fruit, dramatic chiaroscuro lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image better fulfills the prompt requirements by clearly featuring all three modern items (smartphone, AirPods, and energy drink can labeled 'VOLT') while maintaining excellent Dutch Golden Age aesthetics. The composition shows a smartphone prominently placed, white AirPods case clearly visible, and a blue energy drink can integrated naturally with traditional elements like tulips, peaches, bread, and a wine glass. The chiaroscuro lighting is masterfully executed with dramatic light-to-dark transitions. The RIGHT image, while beautiful and more authentically Dutch Golden Age in style, fails to clearly show the energy drink can (only a dark metallic container is visible) and the modern elements are less prominent. Prompt adherence is critical here, and the LEFT image delivers all required elements while maintaining artistic quality.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_14.jpg" alt="Prompt 14" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#14</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd street photography</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A giraffe in a business suit hailing a yellow taxi in Manhattan, briefcase in hoof, other pedestrians completely ignoring it, Vivian Maier style street photography, overcast day</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">LEFT significantly better captures the Vivian Maier street photography aesthetic with its black-and-white treatment, candid documentary style, and atmospheric grain. The composition shows pedestrians genuinely ignoring the surreal subject, which is a key prompt requirement. While RIGHT has the yellow taxi more prominently featured and shows excellent technical execution, it feels more like a staged commercial photograph rather than Maier's observational street photography style. LEFT's vintage film quality, overcast atmosphere, and the way pedestrians naturally move through the scene without acknowledging the giraffe creates the deadpan absurdist humor the prompt seems to call for.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_15.jpg" alt="Prompt 15" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#15</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic landscape</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A serene Bob Ross style landscape painting showing a medieval castle with a Tesla Supercharger station in the parking lot, happy little trees, oil on canvas texture</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">LEFT image significantly outperforms RIGHT in prompt adherence and overall execution. LEFT successfully depicts Tesla Superchargers with recognizable white Tesla vehicles charging, clearly visible 'HAPPY CHARGING' signage, and maintains excellent Bob Ross aesthetics with detailed happy little trees, mountains, and water features. The oil canvas texture is authentic throughout. RIGHT image has critical failures: the Tesla chargers are barely visible, too small, and lack proper branding/detail. The castle is more atmospheric but less defined, and while it has Bob Ross qualities, it misses the anachronistic humor and specificity required by the prompt. LEFT balances the comedic juxtaposition of medieval and modern elements while maintaining artistic quality.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">4</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_16.jpg" alt="Prompt 16" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#16</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd food photography</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Editorial food photography of a sophisticated raccoon in a chef's hat preparing sushi with perfect knife skills, professional kitchen, overhead shot, natural light, shallow depth of field</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 2 (RIGHT) significantly outperforms Model 1 on the critical requirement of an overhead shot. The prompt explicitly requests 'overhead shot,' which Model 2 executes perfectly with a top-down perspective showing the raccoon working at the cutting board. Model 1 uses a straight-on, eye-level composition that directly contradicts this requirement. Model 2 also demonstrates superior knife work depiction with the raccoon actively cutting salmon, showing 'perfect knife skills' as requested. The shallow depth of field is better executed in Model 2, with sharp focus on the cutting action while surrounding elements blur naturally. Both images feature good quality and raccoons in chef attire, but Model 2's adherence to the specific compositional and action requirements of editorial food photography makes it the clear winner.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 6</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">5</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_17.jpg" alt="Prompt 17" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#17</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic portrait</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Renaissance-style oil portrait of a caveman in animal furs scrolling through TikTok on a smartphone, painted in the style of Leonardo da Vinci, dramatic lighting, ornate gold frame</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) delivers a superior Renaissance-style portrait that better captures the specific stylistic requirements. It demonstrates authentic oil painting techniques with visible brushwork, sophisticated chiaroscuro lighting reminiscent of da Vinci, and masterful anatomical rendering. The subject appears more engaged with the smartphone, showing appropriate interaction with TikTok. The composition is dynamic with the three-quarter pose typical of Renaissance portraiture. Model 2 (RIGHT), while technically competent, appears more like a dark photograph or digital render than an oil painting. The lighting is flat, the figure is too centered and static, and the overall execution lacks the painterly qualities and dramatic lighting specified in the prompt.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_18.jpg" alt="Prompt 18" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#18</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd digital art</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Hyper-detailed digital art of a hamster in a tiny spacesuit piloting a fighter jet through clouds, cockpit interior visible, sunset lighting, aviation photography style, motion blur on background</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images are technically impressive, Model 2 (RIGHT) better fulfills the prompt requirements. It delivers superior prompt adherence by showing the cockpit interior more clearly with visible instrumentation and controls, implements motion blur on the background effectively, and captures the aviation photography style more authentically. The RIGHT image shows a realistic cockpit perspective with the hamster properly positioned as a pilot, with hands on controls and detailed instrument panels visible. The sunset lighting is more dramatically rendered with warm golden tones. LEFT, while artistically beautiful, shows an external view of the aircraft rather than emphasizing the cockpit interior, and the motion blur is less pronounced. The hamster in LEFT also appears more as a passenger than an active pilot.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_19.jpg" alt="Prompt 19" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#19</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic fashion</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">High fashion editorial of a Roman gladiator in full armor walking a runway at Paris Fashion Week, surrounded by models in contemporary haute couture, professional runway lighting, Vogue style</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully execute the prompt's concept, the RIGHT image delivers superior technical quality, composition, and Vogue-style editorial aesthetics. The gladiator's armor is more authentic and detailed with accurate historical elements (centurion helmet with red plume, lorica segmentata chest plate, pteruges skirt). The runway lighting is more professional with dramatic spotlighting creating depth and focus. The composition is tighter and more impactful, with better model positioning and contemporary haute couture clearly visible (sleek black gowns, champagne dress). The LEFT image, while creative with its 'VOGUE' text overlay and broader runway view, suffers from less sharp details, somewhat theatrical lighting that feels less editorial, and the gladiator armor appears less historically accurate. The RIGHT image better captures the high-fashion editorial quality requested.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_20.jpg" alt="Prompt 20" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#20</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd pencil sketch</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Detailed graphite pencil sketch of a sloth working as a barista making espresso at high speed, motion lines, coffee shop background, cross-hatching technique</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">LEFT significantly outperforms RIGHT in prompt adherence and conceptual execution. The prompt specifically calls for 'high speed' action with 'motion lines,' which LEFT delivers brilliantly with dynamic swirling motion lines around the sloth's arm and the prominent 'QUICK BREW' text that reinforces the humorous irony. LEFT also features a clearer coffee shop setting with an espresso machine, multiple cups, customers in background, and excellent cross-hatching technique. RIGHT, while showing strong technical skill with beautiful cross-hatching and tonal values, depicts a more static, contemplative sloth without the crucial motion lines or sense of speed. The coffee shop context is less clear in RIGHT, and the composition lacks the narrative clarity and humor central to the prompt.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_22.jpg" alt="Prompt 22" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#22</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd wildlife</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">National Geographic style photo of a polar bear family having a picnic on an iceberg, checkered blanket, sandwiches and lemonade, mother bear pouring drinks, dramatic Arctic lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 2 (RIGHT) delivers a more compelling National Geographic-style image with superior dramatic lighting, better composition, and more accurate prompt execution. The golden hour sunburst through dramatic clouds creates the requested 'dramatic Arctic lighting' far more effectively than the left image's flat, even lighting. Most critically, the RIGHT image shows the mother bear actively pouring from a pitcher into cups, directly fulfilling the 'mother bear pouring drinks' requirement, while the LEFT image only shows bears near picnic items without the pouring action. Both images include the polar bear family, checkered blanket, and picnic elements, but the RIGHT image's backlighting, rim-lit bears, and dynamic sky create a more professional National Geographic aesthetic. The LEFT image, while pleasant and detailed, has more conventional lighting and misses the key pouring action specified in the prompt.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_23.jpg" alt="Prompt 23" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#23</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic action</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">A Viking warrior riding an electric scooter through a modern city bike lane, horned helmet and shield, commuters on bikes nearby, motion blur, GoPro perspective, urban photography</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 2 (RIGHT) better captures the GoPro perspective and creates a more immersive, dynamic composition. The close-up angle from the handlebars perspective is exactly what GoPro footage looks like, with the Viking warrior directly facing the camera. The motion blur on the background buildings and cyclists is excellent, creating a strong sense of speed. Model 1, while compositionally interesting, shows a more traditional wide-angle street photography view that doesn't capture the requested GoPro perspective. Both include the horned helmet, shield, and urban commuters, but Model 2's execution of the technical requirements (GoPro POV, motion blur) is superior.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">5</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_24.jpg" alt="Prompt 24" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#24</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd impressionist painting</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Monet-style impressionist painting of dolphins playing poker around a table underwater, cigars and poker chips floating, dappled light filtering through water, loose brushstrokes</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While the LEFT image is more detailed and technically polished, it fails to capture the Monet impressionist style requested in the prompt. It appears more like a realistic fantasy illustration. The RIGHT image authentically executes loose impressionist brushstrokes characteristic of Monet, with softer edges, atmospheric color blending (particularly the turquoise-gold palette), and the dappled light effect. The impressionist treatment creates visual ambiguity between dolphins and water that's true to the style. Though LEFT has clearer poker elements (chips, cards, cigars, table), RIGHT better balances prompt adherence to the specified artistic style while still showing dolphins, cards, and chips in an impressionist manner.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 6</span>
+                            <span class="score-right">GPT-5: 8</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">3</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_26.jpg" alt="Prompt 26" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#26</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd macro photography</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Extreme macro photography of an ant carrying a tiny briefcase to work, wearing a miniature tie, other ants commuting, shallow depth of field, 100mm macro lens, morning dew</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully execute the whimsical concept of ants commuting with briefcases and ties, the LEFT image significantly outperforms in prompt adherence and macro photography authenticity. It shows multiple ants with briefcases and ties in a genuine commuting scene, with excellent shallow depth of field and abundant morning dew droplets on leaves. The composition captures the 'extreme macro' photography aesthetic with proper scale and perspective. The RIGHT image, while having beautiful lighting and detail on a single ant, loses points for prompt adherence - it only shows one ant prominently, lacks the 'commuting' scene with multiple ants, and the scale/perspective feels less authentic to true macro photography. The LEFT image better represents what an actual 100mm macro photograph would capture.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_27.jpg" alt="Prompt 27" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#27</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic surrealism</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Salvador Dali style surrealist painting of Napoleon Bonaparte playing video games in his pajamas at 3am, melting clocks on wall, empty energy drink cans, dramatic lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) delivers a superior execution of the prompt's surrealist requirements. It features more prominent and classically Dalí-esque melting clocks on the wall, a richer variety of surrealist elements (floating objects, impossible architecture, water replacing floor), and better captures the absurdist humor of the scenario. The composition is more complex and layered with multiple surrealist touches. Model 2 (RIGHT), while technically competent with good painting quality and visible melting clocks, presents a more straightforward, less imaginative interpretation with fewer surrealist elements and a darker, more serious tone that doesn't fully embrace the whimsical absurdity of the prompt.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_28.jpg" alt="Prompt 28" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#28</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd product photography</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Professional product photography of a cat modeling designer sunglasses on a white seamless backdrop, studio lighting, the cat looking impossibly cool and confident, fashion catalog style</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully portray cats wearing sunglasses, the RIGHT image better fulfills the prompt's requirement for 'professional product photography' with superior focus on the sunglasses themselves. The RIGHT image features cleaner composition, proper white seamless backdrop execution, and better product showcase potential. The LEFT image, though creative with the scarf and magazine stack props, deviates from pure product photography style and has the cat positioned lower/smaller in frame. The RIGHT image's cat exhibits a more 'impossibly cool and confident' demeanor with direct, unflinching pose, while maintaining sharper focus on the sunglasses as the hero product.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_29.jpg" alt="Prompt 29" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#29</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic western</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Old west saloon scene with cowboys having a heated debate about cryptocurrency, one pointing at a laptop, whiskey bottles on table, sepia tones, dusty atmosphere, cinematic lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image decisively wins this comparison. It explicitly shows the laptop with a visible Bitcoin chart, directly fulfilling the cryptocurrency element of the prompt. The cowboy is clearly pointing at the laptop as specified, and the scene contains visible whiskey bottles on the table. The saloon setting is well-defined with period-appropriate details (buffalo mount, bottle shelves, wooden furniture). The RIGHT image, while atmospheric with good dusty/smoky effects and cinematic lighting, completely misses the critical laptop element - instead showing what appears to be a generic dark object that could be a box or case. This is a fundamental failure in prompt adherence. The LEFT image also better captures the 'heated debate' energy with dynamic gestures and engaged body language.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 5</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">4</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_30.jpg" alt="Prompt 30" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#30</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd children's book illustration</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Whimsical children's book watercolor illustration of a dignified elephant in reading glasses working as a librarian, stamping books, tiny mouse patrons, cozy library setting, soft colors</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Both images are excellent watercolor illustrations, but the LEFT image better captures the complete narrative of the prompt. It shows the elephant actively stamping books (a key detail), includes multiple mouse patrons interacting with the scene, and presents a more atmospheric library setting with architectural grandeur. The composition creates depth and storytelling, with mice scattered throughout at different scales. The RIGHT image, while beautifully executed with warmer tones, shows only two mice and the elephant appears more contemplative than actively working as a librarian. The LEFT's cooler palette and detailed library architecture also better conveys the 'cozy library setting' with its vaulted ceilings and abundant bookshelves.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 10</span>
+                            <span class="score-right">GPT-5: 8</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_31.jpg" alt="Prompt 31" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#31</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic cyberpunk</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Cyberpunk neon-lit photograph of a 1920s flapper dancing the Charleston in a futuristic Tokyo street, holographic advertisements, rain-slicked pavement, blade runner aesthetic, purple and blue tones</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 2 (RIGHT) delivers superior prompt adherence and overall execution. The flapper is clearly identifiable with period-accurate details (bob haircut, fringe dress, T-strap heels, pearl necklace) and is actively dancing the Charleston with characteristic pose and movement. The cyberpunk environment is well-integrated with excellent neon signage, rain-slicked pavement reflections, and proper purple/blue tones with pink accents. Model 1 (LEFT), while atmospheric, shows a more static figure whose dress and pose are less clearly 1920s flapper-style, and the silhouette treatment reduces detail and impact. RIGHT excels in composition with better focal emphasis, superior detail rendering in both costume and environment, and more compelling visual storytelling.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 6</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_32.jpg" alt="Prompt 32" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#32</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd minimalist design</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Minimalist Scandinavian interior design photograph featuring a bear sitting at a modern dining table eating porridge with a spoon, clean white walls, natural wood, plants, soft natural light</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully capture the Scandinavian aesthetic and whimsical premise, the RIGHT image better executes the specific prompt requirement of 'bear eating porridge with a spoon.' Model 2 shows the bear actively holding a spoon over the bowl in a natural eating posture, directly matching the prompt. Model 1's bear appears more static with the spoon awkwardly positioned. The RIGHT image also demonstrates superior composition with better lighting, more authentic Scandinavian minimalism, and stronger attention to detail in the table setting. The bear's positioning and scale feel more natural and photographically credible.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_33.jpg" alt="Prompt 33" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#33</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic aviation</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Aviation photography of Leonardo da Vinci piloting a modern commercial airliner, visible through cockpit window in Renaissance clothing, instrument panel lit up, sunset at altitude</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">LEFT better fulfills the prompt requirements with superior aviation photography composition. It captures the scene from inside the cockpit showing Leonardo in Renaissance clothing (beret and layered garments) with clearly visible lit instrument panels and a spectacular sunset view. The perspective is authentic to aviation photography. RIGHT, while showing Leonardo through the cockpit window as requested, has an awkward external perspective that's less typical of aviation photography and the Renaissance clothing is less distinct. LEFT's interior cockpit view with detailed instruments, proper lighting, and professional composition makes it significantly stronger.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_34.jpg" alt="Prompt 34" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#34</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd anime style</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Studio Ghibli style animation frame of a capybara running a peaceful ramen shop, stirring a giant pot, other animals as customers slurping noodles, warm lighting, detailed background</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image significantly better captures the Studio Ghibli aesthetic with its characteristic color palette, detailed environmental storytelling, and atmospheric depth. It shows superior composition with the beautiful cherry blossom exterior creating that quintessential Ghibli establishing shot feeling. The capybara is clearly stirring a giant pot as specified, and multiple animal customers (foxes, raccoon, rabbit, cat, and others) are actively slurping noodles. The warm lantern lighting and intricate background details (Japanese signage, shelves with bowls, hanging herbs) are beautifully executed. The RIGHT image, while charming, has an overly monochromatic warm tone that obscures details and lacks Ghibli's signature environmental variety. The animals appear more static, and the composition is more cramped and less dynamic.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_35.jpg" alt="Prompt 35" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#35</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic noir</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Film noir black and white photograph of a 1940s detective in fedora and trench coat, examining evidence with a tablet computer, venetian blind shadows, cigarette smoke, dramatic contrast</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) significantly outperforms Model 2 in prompt adherence by clearly showing the detective examining a tablet computer - the key anachronistic element that makes this prompt unique. The tablet is prominently displayed with visible screen content and a magnifying glass examination. Model 2 shows what appears to be traditional paper documents/photographs instead. Both images excel at film noir aesthetics with venetian blind shadows, cigarette smoke, and dramatic lighting, but LEFT's superior prompt adherence and clearer execution of the specific requested scenario makes it the clear winner. The composition in LEFT is also more balanced with better use of the desk lamp and environmental details.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_36.jpg" alt="Prompt 36" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#36</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd botanical illustration</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Victorian-era botanical illustration style drawing of a venus flytrap plant wearing tiny glasses, reading a miniature newspaper, scientific labels, watercolor and ink, parchment background</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully capture the Victorian botanical illustration style, Model 2 (RIGHT) delivers a more authentic and comprehensive scientific illustration. It features proper scientific labels (Fig. A, B, C), multiple specimen views showing different parts of the plant, and detailed annotations characteristic of period botanical plates. The glasses and newspaper are integrated more naturally into the central specimen. Model 1 (LEFT) is charming and has good composition, but presents a more simplified, single-view illustration with the newspaper held awkwardly by a leaf rather than the trap itself. Model 2 better fulfills the 'scientific labels' requirement and demonstrates superior attention to Victorian botanical illustration conventions.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_37.jpg" alt="Prompt 37" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#37</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic underwater</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Underwater photography of a scuba diver discovering an ancient Roman emperor holding a underwater press conference with microphones, marble columns, schools of fish, rays of light</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) better captures the whimsical, surreal nature of the prompt with a more complete and balanced composition. The emperor is clearly positioned at microphones in a press conference setup, the scuba diver is prominently featured discovering the scene, marble columns frame the composition beautifully, schools of fish are visible, and rays of light penetrate from above. The color palette is vibrant and the underwater photography aesthetic is well-executed. Model 2 (RIGHT) has a more monochromatic, darker tone that loses some visual interest, and while it shows the microphones and statue, the scuba diver is less prominent and the overall scene feels less dynamic and complete. The LEFT image also better balances all the required elements.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_38.jpg" alt="Prompt 38" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#38</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd pop art</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Andy Warhol style pop art print of a French bulldog as a supreme court justice, wearing robes and holding a gavel, bright contrasting colors, halftone dots, repeated pattern</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) significantly better captures the Andy Warhol pop art aesthetic with its clean, graphic style, bold outlines, simplified forms, and authentic halftone dot pattern throughout. The repeated pattern format (2x2 grid) is quintessentially Warhol. The clever 'HONORABLE PAW-VERDICT' text adds personality. Model 2 (RIGHT) has more realistic, detailed rendering with heavy shadowing that contradicts the flat, graphic nature of Warhol's pop art style. While it has bright colors and repetition, it lacks the halftone dots, clean graphic quality, and simplified forms that define Warhol's work.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 6</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_39.jpg" alt="Prompt 39" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#39</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic automotive</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Automotive photography of a horse-drawn carriage modified with LED underglow lights and a massive subwoofer system, parked at a modern car meet, chrome wheels, dramatic lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 2 (RIGHT) delivers superior prompt adherence and technical execution. It clearly shows a horse-drawn carriage with visible LED underglow (cyan/magenta reflections on wet pavement), prominent subwoofer system integrated into the carriage body, chrome/polished wheels, and dramatic automotive-style lighting. The automotive photography aesthetic is well-executed with professional composition, bokeh background, and wet pavement reflections. Model 1 (LEFT), while creative and visually interesting, suffers from confusion - the horses appear disconnected from the carriage position, the overhead lighting rig is distracting and not part of the prompt, and the overall scene feels more like a concert/show setup than a car meet. The RIGHT image better captures the absurdist humor of the prompt while maintaining technical quality.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 6</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">5</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_40.jpg" alt="Prompt 40" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#40</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd abstract expressionism</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Jackson Pollock style abstract expressionist painting created by a chicken walking through paint, visible chicken footprints, splattered colors, the chicken artist visible in corner, canvas texture</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully incorporate the chicken artist and paint splatters, the RIGHT image better fulfills the prompt's specific requirements. It clearly shows visible chicken footprints (the distinct three-toed bird tracks throughout the canvas), which is a key element of the prompt. The RIGHT also presents a more coherent composition with the chicken positioned naturally in the corner, creating a documentary-style scene that tells the story of the chicken creating art. The LEFT image, while energetic and Pollock-esque in its chaotic splatter style, lacks clear chicken footprints - the marks appear more like random splatters than recognizable footprints. The canvas texture is also more visible in the RIGHT image. The RIGHT balances artistic merit with literal prompt adherence more effectively.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_41.jpg" alt="Prompt 41" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#41</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic medical</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Medical photography of a medieval plague doctor in traditional bird mask using a modern MRI machine, hospital setting, fluorescent lighting, clipboard with patient charts</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully capture the surreal juxtaposition of a plague doctor in a modern medical setting, Model 2 (RIGHT) delivers superior execution. It features excellent detail in the plague doctor's traditional bird mask, proper black leather gloves, and most importantly, clearly shows the clipboard with patient charts - a key prompt element that LEFT lacks. The composition is tighter and more focused, with better lighting that highlights the mask's textures. LEFT includes a walking stick (not requested) and has the plague doctor standing awkwardly distant from the equipment. RIGHT's close-up angle creates more dramatic impact and better demonstrates the anachronistic contrast between medieval and modern medical practice.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_42.jpg" alt="Prompt 42" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#42</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd isometric art</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Isometric 3D illustration of squirrels running a sophisticated stock trading floor, tiny suits and ties, multiple monitors with charts, miniature coffee cups, organized chaos, clean design</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images successfully depict isometric trading floors with characters at workstations, the RIGHT image far better adheres to the prompt's specific requirement of 'squirrels.' The LEFT image shows ambiguous brown creatures that are difficult to identify as squirrels - they lack distinctive squirrel features like bushy tails and recognizable facial characteristics. The RIGHT image clearly depicts cartoonish squirrels with prominent bushy tails, visible squirrel faces, and proper proportions. Both show suits, monitors with charts, and coffee cups, but the RIGHT image's superior prompt adherence on the central subject matter (squirrels) is decisive. The RIGHT also has better visual clarity and charm, though the LEFT has a more sophisticated, cinematic aesthetic with its dramatic lighting and complex layout.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 7</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_43.jpg" alt="Prompt 43" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#43</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic sports</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Sports photography of ancient Greek Olympic athletes competing in a modern CrossFit gym, togas and laurel wreaths, doing box jumps and kettlebell swings, dramatic gym lighting, motion freeze</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 2 (RIGHT) significantly better captures the prompt's requirements. It shows athletes in proper togas (not modern athletic wear), with clearly visible laurel wreaths, performing the specified exercises (box jumps and kettlebell swings) with dramatic, cinematic lighting. The motion freeze is excellent. Model 1 (LEFT) fails on the critical 'toga' requirement - athletes are wearing modern athletic clothing, not togas. While LEFT has good composition and gym setting, it misses the core concept of ancient Greeks in modern attire doing CrossFit.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 5</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">4</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">6</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_44.jpg" alt="Prompt 44" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#44</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd stained glass</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Medieval cathedral stained glass window depicting a raccoon saint blessing a dumpster, other raccoons worshipping below, vibrant colored glass, light streaming through, Gothic architecture</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image better fulfills the prompt's specific requirement of depicting a raccoon saint blessing a dumpster. It clearly shows a central raccoon saint figure in blessing pose with a radiant halo above what appears to be a container structure (dumpster), with worshipping raccoons below. The RIGHT image, while beautifully executed, shows the raccoon saint blessing what appears to be an ornate green chest or altar—not a dumpster. The prompt's humorous juxtaposition of sacred imagery with a mundane dumpster is the core creative concept, and only the LEFT image delivers this. Both excel in stained glass aesthetics and Gothic architecture, but prompt adherence is paramount.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_45.jpg" alt="Prompt 45" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#45</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic space</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Retro 1950s sci-fi poster style artwork showing Genghis Khan commanding a spaceship fleet, Mongolian armor in space, planets in background, vintage color palette, dramatic angles</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">LEFT captures the authentic 1950s sci-fi poster aesthetic much more accurately with its vintage typography ('KHAN'S COSMIC HORDE!'), complete poster composition with title text, lighter color palette with cream/beige tones typical of aged posters, and the characteristic rounded spaceship designs. It shows Genghis Khan commanding a clear fleet of spaceships with planets prominently displayed. RIGHT, while visually striking, uses a darker, more modern teal/orange color scheme that doesn't match the vintage 1950s palette requirement. It also features elongated rockets more reminiscent of 1960s-70s aesthetics rather than the rounded UFO-style ships of 1950s sci-fi. LEFT better adheres to all prompt requirements.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_46.jpg" alt="Prompt 46" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#46</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd tattoo flash</span>
+                            <span class="badge badge-difficulty easy">easy</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Traditional American tattoo flash sheet style illustration of a distinguished hedgehog in a suit playing saxophone, bold outlines, limited color palette, multiple angles, vintage tattoo aesthetic</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Model 1 (LEFT) demonstrates superior understanding and execution of traditional American tattoo flash sheet aesthetics. It features the characteristic bold black outlines, authentic vintage tattoo styling with proper flash sheet layout including banner text ('SWEET HOG JAZZ', 'HARMONY HEDGE'), decorative border elements, and multiple character angles as requested. The limited color palette (black, red, green, tan) is period-appropriate. Model 2 (RIGHT), while charming, lacks the essential flash sheet format - it's arranged more like a character study/sticker sheet with various sizes rather than the traditional symmetrical flash sheet layout. The linework in Model 2 is also thinner and less consistent with bold traditional tattoo outlines.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 10</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_48.jpg" alt="Prompt 48" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#48</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd pointillism</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Georges Seurat pointillism technique painting of penguins having a formal tea party in the Antarctic, tiny dots of color, elaborate table setting, icebergs in background, impressionist style</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">The LEFT image demonstrates superior pointillism technique execution, which is the core requirement of the prompt. It shows authentic tiny dots of color throughout the entire composition, faithfully replicating Seurat's signature style. The penguins are formally dressed with hats, the table setting is elaborate with tiered cake stands and tea service, and the icebergs are rendered in beautiful pointillist technique. The RIGHT image, while compositionally pleasant and detailed, uses much broader brushstrokes and lacks the distinctive pointillism dots that define Seurat's work. It's more of a general impressionist painting rather than specifically pointillism.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 9</span>
+                            <span class="score-right">GPT-5: 7</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">6</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">5</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_49.jpg" alt="Prompt 49" loading="lazy">
+                    <div class="winner-badge winner-left">🔵 Gemini Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#49</div>
+                        <div class="badges">
+                            <span class="badge badge-category">anachronistic retail</span>
+                            <span class="badge badge-difficulty medium">medium</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Interior retail photography of a Neanderthal family shopping at IKEA, pushing a cart full of flat-pack furniture, showroom setting, the family examining instruction manual, modern commercial lighting</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">Both images successfully capture the humorous anachronism of Neanderthals shopping at IKEA. LEFT wins for better overall composition and prompt adherence - it shows a full family (4 members), a cart with flat-pack boxes, instruction manual examination, and captures the broader IKEA showroom context with visible signage and other shoppers. The wide shot provides better environmental storytelling. RIGHT excels in detail quality with superior facial features and texture work, showing the instruction manual more prominently, but depicts only 3 family members and has a tighter composition that sacrifices environmental context. The simplified stick-figure manual in RIGHT is clever but less realistic than LEFT's detailed instructions. LEFT's broader perspective and complete family grouping better fulfill the 'retail photography' and 'family' aspects of the prompt.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 8</span>
+                            <span class="score-right">GPT-5: 8</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">8</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="image-container">
+                    <img src="images/labeled_50.jpg" alt="Prompt 50" loading="lazy">
+                    <div class="winner-badge winner-right">🟢 GPT-5 Wins</div>
+                </div>
+                <div class="info-container">
+                    <div class="prompt-header">
+                        <div class="prompt-id">#50</div>
+                        <div class="badges">
+                            <span class="badge badge-category">absurd ukiyo-e</span>
+                            <span class="badge badge-difficulty hard">hard</span>
+                        </div>
+                    </div>
+                    <div class="prompt-text">Japanese ukiyo-e woodblock print style artwork depicting a corgi samurai defending a village from an army of aggressive geese, Mount Fuji in background, traditional flat colors, bold outlines</div>
+                    <div class="evaluation">
+                        <div class="eval-reasoning">While both images demonstrate strong ukiyo-e aesthetics, the RIGHT image better fulfills the specific prompt requirements. It clearly shows a corgi samurai as the central figure in proper samurai armor, actively defending against an attacking flock of geese, with Mount Fuji prominently visible in the background. The composition is direct and focused on the prompt's narrative. The LEFT image, though beautifully executed in ukiyo-e style, makes the corgi samurai less prominent and the geese combat less central to the composition - the bridge scene and villagers compete for attention. The RIGHT image also demonstrates superior prompt adherence with its bold outlines, flat traditional colors, and clear narrative focus on the corgi-versus-geese battle.</div>
+                        <div class="scores">
+                    <div class="score-item">
+                        <div class="score-label">Overall</div>
+                        <div class="score-comparison">
+                            <span class="score-left">Gemini: 8</span>
+                            <span class="score-right">GPT-5: 9</span>
+                        </div>
+                    </div>
+                    
+                        <div class="score-item">
+                            <div class="score-label">Prompt Adherence</div>
+                            <div class="score-comparison">
+                                <span class="score-left">7</span>
+                                <span class="score-right">10</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-comparison">
+                                <span class="score-left">9</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Composition</div>
+                            <div class="score-comparison">
+                                <span class="score-left">8</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <div class="score-label">Style Execution</div>
+                            <div class="score-comparison">
+                                <span class="score-left">10</span>
+                                <span class="score-right">9</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <footer>
+            <p>Evaluated by Claude Sonnet 4.5 | October 2025</p>
+            <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                Left: Google Gemini 2.5 Flash Image | Right: OpenAI GPT-5 Image
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
